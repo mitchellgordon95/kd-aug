@@ -1,0 +1,112 @@
+##################################################################################################
+# Packages used
+##################################################################################################
+
+package sockeye :: .versioner=git .repo="https://github.com/mjpost/sockeye" .ref=HEAD { }
+package sacrebleu :: .versioner=pip .package="sacrebleu" .tag="1.2.12" { }
+package subword_nmt :: .versioner=pip .package="subword-nmt" .tag="0.3.5" { }
+package mosesdecoder :: .versioner=git .repo="https://github.com/moses-smt/mosesdecoder" .ref=HEAD { }
+
+package sentencepiece :: .versioner=git .repo="https://github.com/google/sentencepiece" .ref="tags/v0.1.5" {  # v0.1.6 throws segfault
+  mkdir build
+  cd build
+  cmake ..
+  make -j $(nproc)
+}
+
+package tools
+    :: .versioner=git .repo="https://github.com/shuoyangd/tape4nmt-tools" .ref=HEAD {
+  pip install -r requirements.txt
+}
+
+# using my fork for now, as fairseq evolves pretty fast
+package fairseq
+    :: .versioner=git .repo="https://github.com/shuoyangd/fairseq" .ref=HEAD {
+
+  python setup.py build develop
+}
+
+global {
+
+  # Language choices
+  SRC=(Lang:
+    deen="de"
+  )
+  TRG=(Lang:
+    deen="en"
+  )
+
+  domain=(Domain:
+    wipo="wipo"
+    ted="ted"
+  )
+
+  # Architecture choices
+  # TODO: maybe vary this with choice of language
+  teacher_layers=6
+  teacher_FF_size=2048
+  teacher_model_size=768
+  teacher_embed_size="512:512"
+
+  # TODO: do a big student and a small student branch
+  student_layers=3
+  student_FF_size=2048
+  student_model_size=768
+  student_embed_size="512:512"
+
+
+  ##################################################################################################
+  # General options you should set for your environment
+  ##################################################################################################
+
+  # All ducttape files will be written underneath this directory
+  ducttape_output="out"
+
+  # TODO: there are lots of other training hyperparameters. Should we fiddle with them?
+  train_batch_type=(TestMode: no="word" yes="sentence")
+  train_batch_size=(TestMode: no="80" yes=8)
+  train_dropout=(Dropout: 0.1 0.3 0.5)
+
+  # Sockeye
+  train_checkpoint_freq=(TestMode: no=5000 yes=100)
+  train_max_checkpoints_not_improved=(TestMode: no=16 yes=0)
+  train_num_decode_and_eval=(TestMode: no=500 yes=10)
+
+  # TEST CONFIGURATIONS
+  test_beam_size=(TestMode: no="12" yes="1")
+
+  # Data pre-processing
+  # TODO: appropriate setting here?
+  MaxLen=80
+  Ratio=1
+
+  ##################################################################################################
+  # Job submission parameters
+  ##################################################################################################
+
+  # SGE: generic job flags
+  resource_flags="-l mem_free=2g"
+
+  # SGE: larger job flags
+  resource_flags_16g="-l mem_free=16g"
+
+  # SGE: flags for training a model
+  resource_flags_train="-q gpu.q -l gpu=1,mem_free=4g"
+
+  # SGE: flags for decoding
+  resource_flags_decode="-q gpu.q -l gpu=1,mem_free=4g"
+
+  # SGE: flags for notifying about job completion (put in your email address!)
+  action_flags="-m ae -M mitchell.gordon95@gmail.com"
+
+  # The default submitter: shell (run locally) or sge (run on a grid)
+  submitter=(TestMode: no="sge" yes="shell")
+
+  # Virtual env location. This should be a file path to the virtual env you want loaded before tasks.
+  # This variable supports both conda and Python's virtualenv. For conda, use "conda:ENV" as the value,
+  # where "ENV" is the name of the conda environment that should be loaded. For virtualenv, supply
+  # the path to the script that should be loaded.
+  pyenv=(TestMode: no="conda:sockeye" yes="conda:sockeye-cpu")
+
+  use_cpu=(TestMode: no yes)
+}
