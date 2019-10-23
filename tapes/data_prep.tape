@@ -1,7 +1,7 @@
 # Prepare the general domain data
 task prepare_gd_data calls prepare_data
-    < train_src_in="/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe.$SRC"
-    < train_trg_in="/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe.$TRG"
+    < train_src_in=$TRAIN_SRC@general_domain
+    < train_trg_in=$TRAIN_TRG@general_domain
     > data
     :: pyenv=@
     :: train_max_sent_length=$MaxLen
@@ -10,8 +10,8 @@ task prepare_gd_data calls prepare_data
 
 # Prepare the in domain data
 task prepare_id_data calls prepare_data
-    < train_src_in="/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.train.bpe.$SRC"
-    < train_trg_in="/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.train.bpe.$TRG"
+    < train_src_in=$TRAIN_SRC@in_domain
+    < train_trg_in=$TRAIN_TRG@in_domain
     > data
     :: pyenv=@
     :: train_max_sent_length=$MaxLen

@@ -1,8 +1,8 @@
 # Train the GD teacher
 task train_gd_teacher calls train
     < prepared_data=$data@prepare_gd_data
-    < dev_src="/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.dev.bpe.$SRC"
-    < dev_trg="/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.dev.bpe.$TRG"
+    < dev_src=$DEV_SRC@general_domain
+    < dev_trg=$DEV_TRG@general_domain
     < model_init=/dev/null # Pretty sure ducttape will freak out if we don't have a file here
     > model
     :: pyenv=@
@@ -21,8 +21,8 @@ task train_gd_teacher calls train
 # Adapt the GD teacher
 task train_adapted_teacher calls train
     < prepared_data=$data@prepare_id_data
-    < dev_src="/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.train.bpe.$SRC"
-    < dev_trg="/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.train.bpe.$TRG"
+    < dev_src=$DEV_SRC@in_domain
+    < dev_trg=$DEV_TRG@in_domain
     < model_init=$model@train_gd_teacher
     > model
     :: pyenv=@
@@ -41,8 +41,8 @@ task train_adapted_teacher calls train
 # Train an ID teacher
 task train_id_baseline_teacher calls train
     < prepared_data=$data@prepare_id_data
-    < dev_src="/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.train.bpe.$SRC"
-    < dev_trg="/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.train.bpe.$TRG"
+    < dev_src=$DEV_SRC@in_domain
+    < dev_trg=$DEV_TRG@in_domain
     < model_init=/dev/null # Pretty sure ducttape will freak out if we don't have a file here
     > model
     :: pyenv=@

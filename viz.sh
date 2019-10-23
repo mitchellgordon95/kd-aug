@@ -1,6 +1,13 @@
 mkdir viz
 
-for task in gd_teacher  adapted_teacher  id_baseline_teacher  gd_student  gd_baseline_student  adapted_gd_student  adapted_gd_student_baseline  id_student  id_baseline_student  id_small_baseline
-do
-    ducttape main.tape -C main.tconf -p $task viz  > graph-viz.txt && dot -Tpdf graph-viz.txt -o viz/$task.pdf
-done
+ducttape main.tape -C main.tconf -p all viz  > graph-viz.txt
+sed -i '2 i\ranksep=2' graph-viz.txt
+
+sed '/bleu_dev\|decode_dev/d' graph-viz.txt > viz/no_eval.txt
+dot -Tpdf viz/no_eval.txt -O
+
+echo "digraph G {" > viz/eval.txt
+echo "ranksep=2" >> viz/eval.txt
+sed '/bleu_dev\|decode_dev/!d' graph-viz.txt >> viz/eval.txt
+echo "}" >> viz/eval.txt
+dot -Tpdf viz/eval.txt -O
