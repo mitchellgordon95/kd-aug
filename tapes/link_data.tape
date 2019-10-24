@@ -7,12 +7,17 @@ task general_domain
   > TRAIN_TRG
   > DEV_SRC
   > DEV_TRG
+  > SRC_VOCAB
+  > TRG_VOCAB
   :: SRC=@ TRG=@ {
   ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe.$SRC" $TRAIN_SRC
   ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe.$TRG" $TRAIN_TRG
 
   ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.dev.bpe.$SRC" $DEV_SRC
   ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.dev.bpe.$TRG" $DEV_TRG
+
+  ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe_vocab.$SRC" $SRC_VOCAB
+  ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe_vocab.$TRG" $TRG_VOCAB
 }
 
 task in_domain

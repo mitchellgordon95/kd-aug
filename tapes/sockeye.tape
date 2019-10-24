@@ -1,6 +1,8 @@
 func prepare_data : sockeye
     < train_src_in
     < train_trg_in
+    < src_vocab
+    < trg_vocab
     > data
     :: pyenv
     :: train_max_sent_length
@@ -9,7 +11,8 @@ func prepare_data : sockeye
   python3 -m sockeye.prepare_data \
       --source $train_src_in \
       --target $train_trg_in \
-      --shared-vocab \
+      --source-vocab $src_vocab \
+      --target-vocab $trg_vocab \
       --word-min-count 2:2 \
       --bucket-width 10 \
       --max-seq-len $train_max_sent_length \

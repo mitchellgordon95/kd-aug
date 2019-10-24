@@ -13,6 +13,8 @@ task distill_gd_data calls decode
 task prepare_distilled_gd_data calls prepare_data
     < train_src_in=$TRAIN_SRC@general_domain
     < train_trg_in=$out@distill_gd_data
+    < src_vocab=$SRC_VOCAB@general_domain
+    < trg_vocab=$TRG_VOCAB@general_domain
     > data
     :: pyenv=@
     :: train_max_sent_length=$MaxLen
@@ -34,6 +36,8 @@ task distill_id_with_adapted calls decode
 task prepare_distilled_id_with_adapted calls prepare_data
     < train_src_in=$TRAIN_SRC@in_domain
     < train_trg_in=$out@distill_id_with_adapted
+    < src_vocab=$SRC_VOCAB@general_domain
+    < trg_vocab=$TRG_VOCAB@general_domain
     > data
     :: pyenv=@
     :: train_max_sent_length=$MaxLen
@@ -56,6 +60,8 @@ task distill_id_with_baseline_teacher calls decode
 task prepare_distilled_id_with_baseline_teacher calls prepare_data
     < train_src_in=$TRAIN_SRC@in_domain
     < train_trg_in=$out@distill_id_with_baseline_teacher
+    < src_vocab=$SRC_VOCAB@general_domain
+    < trg_vocab=$TRG_VOCAB@general_domain
     > data
     :: pyenv=@
     :: train_max_sent_length=$MaxLen
