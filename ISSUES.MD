@@ -1,0 +1,1 @@
+1. Some tasks ask for a gpu even though they don't need it. This is because mxnet throws an "Illegal Instruction" exception if you try to do things on a CPU machine while having cuda10.0 loaded. See https://github.com/apache/incubator-mxnet/issues/14664
