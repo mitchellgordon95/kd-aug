@@ -8,7 +8,7 @@ task prepare_gd_data calls prepare_data
     :: pyenv=@
     :: train_max_sent_length=$MaxLen
     :: seed=1235813
-    :: .submitter=$submitter .resource_flags=$resource_flags_16g .action_flags=@
+    :: .submitter=@ .resource_flags=$resource_flags_train .action_flags=@
 
 # Prepare the in domain data
 task prepare_id_data calls prepare_data
@@ -20,4 +20,4 @@ task prepare_id_data calls prepare_data
     :: pyenv=@
     :: train_max_sent_length=$MaxLen
     :: seed=1235813
-    :: .submitter=$submitter .resource_flags=$resource_flags_16g .action_flags=@
+    :: .submitter=@ .resource_flags=$resource_flags_train .action_flags=@

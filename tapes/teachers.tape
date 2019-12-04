@@ -6,11 +6,6 @@ task train_gd_teacher calls train
     < model_init=/dev/null # Pretty sure ducttape will freak out if we don't have a file here
     > model
     :: pyenv=@
-    :: train_batch_type=@
-    :: train_batch_size=@
-    :: train_max_checkpoints_not_improved=@
-    :: train_checkpoint_freq=@
-    :: train_num_decode_and_eval=@
     :: num_layers=$teacher_layers
     :: model_size=$teacher_model_size
     :: embed_size=$teacher_embed_size
@@ -26,11 +21,6 @@ task train_adapted_teacher calls train
     < model_init=$model@train_gd_teacher
     > model
     :: pyenv=@
-    :: train_batch_type=@
-    :: train_batch_size=@
-    :: train_max_checkpoints_not_improved=@
-    :: train_checkpoint_freq=@
-    :: train_num_decode_and_eval=@
     :: num_layers=$teacher_layers
     :: model_size=$teacher_model_size
     :: embed_size=$teacher_embed_size
@@ -46,11 +36,6 @@ task train_id_baseline_teacher calls train
     < model_init=/dev/null # Pretty sure ducttape will freak out if we don't have a file here
     > model
     :: pyenv=@
-    :: train_batch_type=@
-    :: train_batch_size=@
-    :: train_max_checkpoints_not_improved=@
-    :: train_checkpoint_freq=@
-    :: train_num_decode_and_eval=@
     :: num_layers=$teacher_layers
     :: model_size=$teacher_model_size
     :: embed_size=$teacher_embed_size

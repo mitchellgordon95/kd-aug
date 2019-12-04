@@ -9,15 +9,16 @@ task general_domain
   > DEV_TRG
   > SRC_VOCAB
   > TRG_VOCAB
-  :: SRC=@ TRG=@ {
-  ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe.$SRC" $TRAIN_SRC
-  ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe.$TRG" $TRAIN_TRG
+  # TODO: see ISSUES.md #1
+  :: SRC=@ TRG=@ pyenv=@ .submitter=@ .resource_flags=$resource_flags_train .action_flags=@ {
+  ln -s "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe.$SRC" $TRAIN_SRC
+  ln -s "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe.$TRG" $TRAIN_TRG
 
-  ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.dev.bpe.$SRC" $DEV_SRC
-  ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.dev.bpe.$TRG" $DEV_TRG
+  ln -s "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.dev.bpe.$SRC" $DEV_SRC
+  ln -s "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.dev.bpe.$TRG" $DEV_TRG
 
-  ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe_vocab.$SRC" $SRC_VOCAB
-  ln "/exp/scale18/mt/data/$SRC-$TRG/generaldomain/generaldomain.train.bpe_vocab.$TRG" $TRG_VOCAB
+  python -m sockeye.vocab -i $TRAIN_SRC -o $SRC_VOCAB
+  python -m sockeye.vocab -i $TRAIN_TRG -o $TRG_VOCAB
 }
 
 task in_domain
@@ -26,9 +27,9 @@ task in_domain
   > DEV_SRC
   > DEV_TRG
   :: SRC=@ TRG=@ domain=@ {
-  ln "/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.train.bpe.$SRC" $TRAIN_SRC
-  ln "/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.train.bpe.$TRG" $TRAIN_TRG
+  ln -s "/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.train.bpe.$SRC" $TRAIN_SRC
+  ln -s "/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.train.bpe.$TRG" $TRAIN_TRG
 
-  ln "/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.dev.bpe.$SRC" $DEV_SRC
-  ln "/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.dev.bpe.$TRG" $DEV_TRG
+  ln -s "/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.dev.bpe.$SRC" $DEV_SRC
+  ln -s "/exp/scale18/mt/data/$SRC-$TRG/$domain/$domain.dev.bpe.$TRG" $DEV_TRG
 }

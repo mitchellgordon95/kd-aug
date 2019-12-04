@@ -31,9 +31,11 @@ global {
   # Language choices
   SRC=(Lang:
     deen="de"
+    ruen="ru"
   )
   TRG=(Lang:
     deen="en"
+    ruen="en"
   )
 
   domain=(Domain:
@@ -45,15 +47,26 @@ global {
   # TODO: maybe vary this with choice of language
   teacher_layers=6
   teacher_FF_size=2048
-  teacher_model_size=768
+  teacher_model_size=512
   teacher_embed_size="512:512"
 
   # TODO: do a big student and a small student branch
-  student_layers=3
-  student_FF_size=2048
-  student_model_size=768
-  student_embed_size="512:512"
-
+  student_layers=(StudentSize:
+    half=3
+    quarter=3
+  )
+  student_FF_size=(StudentSize:
+    half=2048
+    quarter=1024
+  )
+  student_model_size=(StudentSize:
+    half=512
+    quarter=256
+  )
+  student_embed_size=(StudentSize:
+    half="512:512"
+    quarter="256:256"
+  )
 
   ##################################################################################################
   # General options you should set for your environment
@@ -62,22 +75,8 @@ global {
   # All ducttape files will be written underneath this directory
   ducttape_output="out"
 
-  # TODO: there are lots of other training hyperparameters. Should we fiddle with them?
-  train_batch_type=(TestMode: no="word" yes="sentence")
-  train_batch_size=(TestMode: no="80" yes=8)
-  train_dropout=(Dropout: 0.1 0.3 0.5)
-
-  # Sockeye
-  train_checkpoint_freq=(TestMode: no=5000 yes=100)
-  train_max_checkpoints_not_improved=(TestMode: no=16 yes=0)
-  train_num_decode_and_eval=(TestMode: no=500 yes=10)
-
-  # TEST CONFIGURATIONS
-  test_beam_size=(TestMode: no="12" yes="1")
-
   # Data pre-processing
-  # TODO: appropriate setting here?
-  MaxLen=80
+  MaxLen=100
   Ratio=1
 
   ##################################################################################################
@@ -91,10 +90,10 @@ global {
   resource_flags_16g="-l mem_free=16g"
 
   # SGE: flags for training a model
-  resource_flags_train="-q gpu.q -l gpu=1,mem_free=4g"
+  resource_flags_train="-q gpu.q@@2080 -l gpu=1,mem_free=4g,h_rt=120:00:00"
 
   # SGE: flags for decoding
-  resource_flags_decode="-q gpu.q -l gpu=1,mem_free=4g"
+  resource_flags_decode="-q gpu.q@@2080 -l gpu=1,mem_free=4g,h_rt=120:00:00"
 
   # SGE: flags for notifying about job completion (put in your email address!)
   action_flags="-m ae -M mitchell.gordon95@gmail.com"
@@ -102,11 +101,11 @@ global {
   # The default submitter: shell (run locally) or sge (run on a grid)
   submitter=(TestMode: no="sge" yes="shell")
 
+  use_cpu=(TestMode: no yes)
+
   # Virtual env location. This should be a file path to the virtual env you want loaded before tasks.
   # This variable supports both conda and Python's virtualenv. For conda, use "conda:ENV" as the value,
   # where "ENV" is the name of the conda environment that should be loaded. For virtualenv, supply
   # the path to the script that should be loaded.
-  pyenv=(TestMode: no="conda:sockeye" yes="conda:sockeye-cpu")
-
-  use_cpu=(TestMode: no yes)
+  pyenv="conda:sockeye"
 }

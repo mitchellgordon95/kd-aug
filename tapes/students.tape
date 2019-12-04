@@ -6,11 +6,6 @@ task train_gd_student calls train
     < model_init=/dev/null # Pretty sure ducttape will freak out if we don't have a file here
     > model
     :: pyenv=@
-    :: train_batch_type=@
-    :: train_batch_size=@
-    :: train_max_checkpoints_not_improved=@
-    :: train_checkpoint_freq=@
-    :: train_num_decode_and_eval=@
     :: num_layers=$student_layers
     :: model_size=$student_model_size
     :: embed_size=$student_embed_size
@@ -26,11 +21,6 @@ task train_adapted_gd_student calls train
     < model_init=$model@train_gd_student
     > model
     :: pyenv=@
-    :: train_batch_type=@
-    :: train_batch_size=@
-    :: train_max_checkpoints_not_improved=@
-    :: train_checkpoint_freq=@
-    :: train_num_decode_and_eval=@
     :: num_layers=$student_layers
     :: model_size=$student_model_size
     :: embed_size=$student_embed_size
@@ -46,11 +36,6 @@ task train_gd_student_baseline calls train
     < model_init=/dev/null # Pretty sure ducttape will freak out if we don't have a file here
     > model
     :: pyenv=@
-    :: train_batch_type=@
-    :: train_batch_size=@
-    :: train_max_checkpoints_not_improved=@
-    :: train_checkpoint_freq=@
-    :: train_num_decode_and_eval=@
     :: num_layers=$student_layers
     :: model_size=$student_model_size
     :: embed_size=$student_embed_size
@@ -66,11 +51,6 @@ task train_adapted_gd_student_baseline calls train
     < model_init=$model@train_gd_student_baseline
     > model
     :: pyenv=@
-    :: train_batch_type=@
-    :: train_batch_size=@
-    :: train_max_checkpoints_not_improved=@
-    :: train_checkpoint_freq=@
-    :: train_num_decode_and_eval=@
     :: num_layers=$student_layers
     :: model_size=$student_model_size
     :: embed_size=$student_embed_size
@@ -86,11 +66,6 @@ task train_id_student calls train
     < model_init=/dev/null
     > model
     :: pyenv=@
-    :: train_batch_type=@
-    :: train_batch_size=@
-    :: train_max_checkpoints_not_improved=@
-    :: train_checkpoint_freq=@
-    :: train_num_decode_and_eval=@
     :: num_layers=$student_layers
     :: model_size=$student_model_size
     :: embed_size=$student_embed_size
@@ -106,11 +81,6 @@ task train_id_baseline_student calls train
     < model_init=/dev/null
     > model
     :: pyenv=@
-    :: train_batch_type=@
-    :: train_batch_size=@
-    :: train_max_checkpoints_not_improved=@
-    :: train_checkpoint_freq=@
-    :: train_num_decode_and_eval=@
     :: num_layers=$student_layers
     :: model_size=$student_model_size
     :: embed_size=$student_embed_size
@@ -126,11 +96,6 @@ task train_id_small_baseline calls train
     < model_init=/dev/null
     > model
     :: pyenv=@
-    :: train_batch_type=@
-    :: train_batch_size=@
-    :: train_max_checkpoints_not_improved=@
-    :: train_checkpoint_freq=@
-    :: train_num_decode_and_eval=@
     :: num_layers=$student_layers
     :: model_size=$student_model_size
     :: embed_size=$student_embed_size

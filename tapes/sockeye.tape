@@ -28,11 +28,6 @@ func train : sockeye
     < model_init
     > model
     :: pyenv
-    :: train_batch_type
-    :: train_batch_size
-    :: train_max_checkpoints_not_improved
-    :: train_checkpoint_freq
-    :: train_num_decode_and_eval
     :: num_layers
     :: model_size
     :: embed_size
@@ -42,13 +37,17 @@ func train : sockeye
   if [[ $model_init == "/dev/null" ]]; then
     params=""
   else
-    params="--params $model_init"
+    params="--params $model_init/params.best"
   fi
 
   if [[ $use_cpu == "yes" ]]; then
     device="--use-cpu"
   else
-    device="--device-ids $(free-gpu)"
+    visible=(${CUDA_VISIBLE_DEVICES//,/ })
+    # If expr returns 0, bash quits when we're using set -e
+    maxid=$(expr "${#visible[@]}" - 1) || true
+    visible_mapping=$(seq -s ' ' 0 $maxid)
+    device="--device-ids $visible_mapping"
   fi
 
   python -m sockeye.train \
@@ -64,34 +63,37 @@ func train : sockeye
     --transformer-model-size=$model_size \
     --transformer-attention-heads=8 \
     --transformer-feed-forward-num-hidden=$FF_size \
-    --transformer-positional-embedding-type=fixed \
-    --transformer-preprocess=n \
-    --transformer-postprocess=dr \
-    --transformer-dropout-attention=0.1 \
-    --transformer-dropout-act=0.1 \
-    --transformer-dropout-prepost=0.1 \
-    --weight-tying \
-    --weight-tying-type=src_trg_softmax \
-    --weight-init=xavier \
-    --weight-init-scale=3.0 \
-    --weight-init-xavier-factor-type=avg \
     --num-embed=$embed_size \
     --optimizer=adam \
-    --optimized-metric=perplexity \
-    --label-smoothing=0.1 \
-    --gradient-clipping-threshold=-1 \
     --initial-learning-rate=0.0002 \
     --learning-rate-reduce-num-not-improved=8 \
     --learning-rate-reduce-factor=0.9 \
     --learning-rate-scheduler-type=plateau-reduce \
     --learning-rate-decay-optimizer-states-reset=best \
     --learning-rate-decay-param-reset \
-    --max-num-checkpoint-not-improved $train_max_checkpoints_not_improved \
-    --batch-type=$train_batch_type \
-    --batch-size=$train_batch_size \
-    --checkpoint-frequency=$train_checkpoint_freq \
-    --decode-and-evaluate=$train_num_decode_and_eval \
-    --keep-last-params=60 \
+    --max-num-checkpoint-not-improved 10 \
+    --batch-type=word \
+    --batch-size=4096 \
+    --checkpoint-frequency=5000 \
+    --decode-and-evaluate=-1 \
+    --decode-and-evaluate-use-cpu \
+    --disable-device-locking \
+    --keep-last-params=10 \
+    --max-num-epochs=100 \
+    --max-updates=300000 \
+    # These are default
+    # --transformer-positional-embedding-type=learned \
+    # --transformer-preprocess=n \
+    # --transformer-postprocess=dr \
+    # --transformer-dropout-attention=0.1 \
+    # --transformer-dropout-act=0.1 \
+    # --transformer-dropout-prepost=0.1 \
+    # --weight-init=xavier \
+    # --weight-init-scale=3.0 \
+    # --weight-init-xavier-factor-type=avg \
+    # --optimized-metric=perplexity \
+    # --label-smoothing=0.1 \
+    # --gradient-clipping-threshold=1 \
 }
 
 
@@ -110,7 +112,11 @@ func decode : sockeye
   if [[ $use_cpu == "yes" ]]; then
     device="--use-cpu"
   else
-    device="--device-ids $(free-gpu)"
+    visible=(${CUDA_VISIBLE_DEVICES//,/ })
+    # If expr returns 0, bash quits when we're using set -e
+    maxid=$(expr "${#visible[@]}" - 1) || true
+    visible_mapping=$(seq -s ' ' 0 $maxid)
+    device="--device-ids $visible_mapping"
   fi
 
   python3 -m sockeye.translate \
@@ -119,10 +125,11 @@ func decode : sockeye
     -i $in \
     -o out.all \
     --output-type translation_with_score \
-    --beam-size $test_beam_size \
+    --beam-size 12 \
     --batch-size 1 \
     --max-input-len 300 \
 
-    cat out.all | unpaste $scores $out
-    mv out.all.log $log
+    cat out.all | cut -f 1 > $out_scores
+    cat out.all | cut -f 2 > $out
+    mv out.all.log $out_log
 }

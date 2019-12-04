@@ -8,10 +8,9 @@ submitter shell :: COMMANDS TASK_VARIABLES {
 
       # Load the environment
       if [[ $virtualenv == conda:* ]]; then
-        . /etc/profile.d/conda.sh
         target=$(echo $virtualenv | cut -d: -f2-)
         source deactivate
-        conda activate $target
+        source activate $target
       else
         source $virtualenv
       fi
@@ -39,7 +38,7 @@ submitter sge :: action_flags
     echo "#$ $resource_flags" >> $wrapper
     echo "#$ $action_flags" >> $wrapper
     echo "#$ -j y" >> $wrapper
-    echo "#$ -o localhost:$PWD/job.out" >> $wrapper
+    echo "#$ -o $PWD/job.out" >> $wrapper
     echo "#$ -N $CONFIGURATION-$TASK-$REALIZATION" >> $wrapper
     echo "" >> $wrapper
 
@@ -59,10 +58,12 @@ if [[ ! -z \${pyenv:-} ]]; then
 
   # Load the environment
   if [[ \$virtualenv == conda:* ]]; then
-    . /etc/profile.d/conda.sh
+    # I don't think we need this if we just do source activate
+    # . /etc/profile.d/conda.sh
     target=\$(echo \$virtualenv | cut -d: -f2-)
     source deactivate
-    conda activate \$target
+    source activate \$target
+    #conda activate \$target
   else
     source \$virtualenv
   fi
@@ -70,6 +71,8 @@ fi
 set -u
 
 EOF
+    # Load the CUDA toolkit on COE grid
+    echo "ml load cuda10.0/toolkit" >> $wrapper
 
     # The current working directory will also be changed by most schedulers
     echo "cd $PWD" >> $wrapper
@@ -79,7 +82,10 @@ EOF
     echo "echo" >> $wrapper
     echo "echo CUDA in ENV:" >> $wrapper
     echo "env | grep CUDA" >> $wrapper
+    echo "echo" >> $wrapper
+    echo "echo SGE in ENV:" >> $wrapper
     echo "env | grep SGE" >> $wrapper
+    echo "nvidia-smi" >> $wrapper
     echo >> $wrapper
 
     echo "$COMMANDS" >> $wrapper
