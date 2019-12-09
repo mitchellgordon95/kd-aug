@@ -43,6 +43,8 @@ def row(task, domain, student_size, pretty_name):
 print(row('gd_teacher', None, None, 'Teacher'))
 print(row('gd_student', None, 'half', 'Half Student'))
 print(row('gd_baseline_student', None, 'half', 'Half Sized Baseline'))
+print(row('gd_student', None, 'quarter', 'Quarter Student'))
+print(row('gd_baseline_student', None, 'quarter', 'Quarter Sized Baseline'))
 
 for domain in ['ted', 'wipo']:
     print()
