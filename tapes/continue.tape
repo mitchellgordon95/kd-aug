@@ -1,0 +1,71 @@
+# Continue training the GD student on the gold data
+task continue_train_gd_student calls train
+    < prepared_data=$data@prepare_distilled_gd_data
+    < dev_src=$DEV_SRC@general_domain
+    < dev_trg=$DEV_TRG@general_domain
+    < model_init=$model@train_gd_student
+    > model
+    :: pyenv=@
+    :: num_layers=$student_layers
+    :: model_size=$student_model_size
+    :: embed_size=$student_embed_size
+    :: FF_size=$student_FF_size
+    :: use_cpu=@
+    :: .submitter=@ .resource_flags=$resource_flags_train .action_flags=@
+
+task continue_gd_student_score_train calls score
+     < src=$TRAIN_SRC@general_domain
+     < trg=$TRAIN_TRG@general_domain
+     < model=$model@continue_train_gd_student
+     > scores
+     > avgscore
+     :: use_cpu=@ :: pyenv=@
+     :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
+
+# Continue train ID student on the gold ID data
+task continue_train_id_student calls train
+    < prepared_data=$data@prepare_id_data
+    < dev_src=$DEV_SRC@in_domain
+    < dev_trg=$DEV_TRG@in_domain
+    < model_init=$model@train_id_student
+    > model
+    :: pyenv=@
+    :: num_layers=$student_layers
+    :: model_size=$student_model_size
+    :: embed_size=$student_embed_size
+    :: FF_size=$student_FF_size
+    :: use_cpu=@
+    :: .submitter=@ .resource_flags=$resource_flags_train .action_flags=@
+
+task continue_id_student_score_train calls score
+     < src=$TRAIN_SRC@in_domain
+     < trg=$TRAIN_TRG@in_domain
+     < model=$model@continue_train_id_student
+     > scores
+     > avgscore
+     :: use_cpu=@ :: pyenv=@
+     :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
+
+# Continue trainining ID baseline student on the gold data
+task continue_train_id_baseline_student calls train
+    < prepared_data=$data@prepare_id_data
+    < dev_src=$DEV_SRC@in_domain
+    < dev_trg=$DEV_TRG@in_domain
+    < model_init=$model@train_id_baseline_student
+    > model
+    :: pyenv=@
+    :: num_layers=$student_layers
+    :: model_size=$student_model_size
+    :: embed_size=$student_embed_size
+    :: FF_size=$student_FF_size
+    :: use_cpu=@
+    :: .submitter=@ .resource_flags=$resource_flags_train .action_flags=@
+
+task continue_id_baseline_student_score_train calls score
+     < src=$TRAIN_SRC@in_domain
+     < trg=$TRAIN_TRG@in_domain
+     < model=$model@continue_train_id_baseline_student
+     > scores
+     > avgscore
+     :: use_cpu=@ :: pyenv=@
+     :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode

@@ -10,11 +10,25 @@ import "tapes/teachers.tape"
 import "tapes/distilling.tape"
 import "tapes/students.tape"
 import "tapes/evals.tape"
+import "tapes/score_train.tape"
+import "tapes/huda.tape"
+import "tapes/continue.tape"
 
 plan all {
   reach gd_teacher_bleu_dev, adapted_teacher_bleu_dev, id_baseline_teacher_bleu_dev, gd_student_bleu_dev, gd_baseline_student_bleu_dev, adapted_gd_student_bleu_dev, adapted_gd_student_baseline_bleu_dev, id_student_bleu_dev, id_baseline_student_bleu_dev, id_small_baseline_bleu_dev via (Domain: *) * (Lang: deen) * (StudentSize: *)
 }
 
+plan score_train {
+  reach  gd_student_score_train, gd_baseline_student_score_train, adapted_gd_student_score_train, adapted_gd_student_baseline_score_train, id_student_score_train, id_baseline_student_score_train, id_small_baseline_score_train via (Domain: *) * (Lang: deen) * (StudentSize: *)
+}
+
+plan huda {
+  reach gd_student_huda, gd_student_baseline_huda, id_small_baseline_huda, id_student_baseline_huda via (Domain: *) * (Lang: deen) * (StudentSize: *) * (HudaData: *)
+}
+
+plan continue {
+  reach continue_gd_student_score_train, continue_id_student_score_train, continue_id_baseline_student_score_train via (Domain: *) * (Lang: deen) * (StudentSize: *)
+}
 
 # Nuts and bolts:
 global {
