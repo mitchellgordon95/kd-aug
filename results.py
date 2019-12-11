@@ -69,7 +69,7 @@ for domain in ['ted', 'wipo']:
         print('\\hline')
         print(row('id_small_baseline', domain, size, f'{domain} & {size} & None & None & No'))
         print(row('id_baseline_student', domain, size, f'{domain} & {size} & None & Baseline & No'))
-        print(row('id_baseline_student', domain, size, f'{domain} & {size} & None & None & Yes', continued=True))
+        print(row('id_baseline_student', domain, size, f'{domain} & {size} & None & Baseline & Yes', continued=True))
         print(row('id_student', domain, size, f'{domain} & {size} & None & Adapted & No'))
         print(row('id_student', domain, size, f'{domain} & {size} & None & Adapted & Yes', continued=True))
         print(row('adapted_gd_student_baseline', domain, size, f'{domain} & {size} & Baseline & None & No'))
