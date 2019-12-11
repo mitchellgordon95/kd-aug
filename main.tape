@@ -30,6 +30,10 @@ plan continue {
   reach continue_gd_student_score_train, continue_id_student_score_train, continue_id_baseline_student_score_train via (Domain: *) * (Lang: deen) * (StudentSize: *)
 }
 
+plan daad {
+  reach daad_bleu_dev via (Domain: *) * (Lang: deen) * (StudentSize: *)
+}
+
 # Nuts and bolts:
 global {
   ducttape_experimental_packages=true

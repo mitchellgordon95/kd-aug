@@ -28,6 +28,21 @@ task train_adapted_gd_student calls train
     :: use_cpu=@
     :: .submitter=@ .resource_flags=$resource_flags_train .action_flags=@
 
+# Adapt the GD student on distilled id data
+task train_daad calls train
+    < prepared_data=$data@prepare_distilled_id_with_adapted
+    < dev_src=$DEV_SRC@in_domain
+    < dev_trg=$DEV_TRG@in_domain
+    < model_init=$model@train_gd_student
+    > model
+    :: pyenv=@
+    :: num_layers=$student_layers
+    :: model_size=$student_model_size
+    :: embed_size=$student_embed_size
+    :: FF_size=$student_FF_size
+    :: use_cpu=@
+    :: .submitter=@ .resource_flags=$resource_flags_train .action_flags=@
+
 # Train the GD baseline
 task train_gd_student_baseline calls train
     < prepared_data=$data@prepare_gd_data

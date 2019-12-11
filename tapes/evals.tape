@@ -89,6 +89,19 @@ task adapted_gd_student_baseline_bleu_dev calls multi_bleu
      < ref=$DEV_TRG@in_domain
      > bleu
 
+# Test DAAD
+task daad_decode_dev calls decode 
+    < in=$DEV_SRC@in_domain
+    < model=$model@train_daad
+    > out out_log out_scores
+    :: use_cpu=@ pyenv=@
+    :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
+
+task daad_bleu_dev calls multi_bleu
+     < in=$out@daad_decode_dev
+     < ref=$DEV_TRG@in_domain
+     > bleu
+
 # Test the ID student
 task id_student_decode_dev calls decode 
     < in=$DEV_SRC@in_domain
