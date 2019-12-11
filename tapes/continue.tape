@@ -22,6 +22,18 @@ task continue_gd_student_score_train calls score
      :: use_cpu=@ :: pyenv=@
      :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
 
+task continue_gd_student_decode_dev calls decode 
+    < in=$DEV_SRC@general_domain
+    < model=$model@continue_train_gd_student
+    > out out_log out_scores
+    :: use_cpu=@ pyenv=@
+    :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
+
+task continue_gd_student_bleu_dev calls multi_bleu
+     < in=$out@continue_gd_student_decode_dev
+     < ref=$DEV_TRG@in_domain
+     > bleu
+
 # Continue train ID student on the gold ID data
 task continue_train_id_student calls train
     < prepared_data=$data@prepare_id_data
@@ -46,6 +58,18 @@ task continue_id_student_score_train calls score
      :: use_cpu=@ :: pyenv=@
      :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
 
+task continue_id_student_decode_dev calls decode 
+    < in=$DEV_SRC@in_domain
+    < model=$model@continue_train_id_student
+    > out out_log out_scores
+    :: use_cpu=@ pyenv=@
+    :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
+
+task continue_id_student_bleu_dev calls multi_bleu
+     < in=$out@continue_id_student_decode_dev
+     < ref=$DEV_TRG@in_domain
+     > bleu
+
 # Continue trainining ID baseline student on the gold data
 task continue_train_id_baseline_student calls train
     < prepared_data=$data@prepare_id_data
@@ -69,3 +93,15 @@ task continue_id_baseline_student_score_train calls score
      > avgscore
      :: use_cpu=@ :: pyenv=@
      :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
+
+task continue_id_baseline_student_decode_dev calls decode 
+    < in=$DEV_SRC@in_domain
+    < model=$model@continue_train_id_baseline_student
+    > out out_log out_scores
+    :: use_cpu=@ pyenv=@
+    :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
+
+task continue_id_baseline_student_bleu_dev calls multi_bleu
+     < in=$out@continue_id_baseline_student_decode_dev
+     < ref=$DEV_TRG@in_domain
+     > bleu

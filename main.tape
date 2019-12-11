@@ -27,7 +27,7 @@ plan huda {
 }
 
 plan continue {
-  reach continue_gd_student_score_train, continue_id_student_score_train, continue_id_baseline_student_score_train via (Domain: *) * (Lang: deen) * (StudentSize: *)
+  reach continue_gd_student_score_train, continue_id_student_score_train, continue_id_baseline_student_score_train, continue_gd_student_bleu_dev, continue_id_student_bleu_dev, continue_id_baseline_student_bleu_dev via (Domain: *) * (Lang: deen) * (StudentSize: *)
 }
 
 plan daad {
