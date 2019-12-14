@@ -65,7 +65,7 @@ task distill_gd_data
     < chunk7=$out@distill_gd_data_chunk7
     < chunk8=$out@distill_gd_data_chunk8
     > out {
-    cat $chunk1 $chunk3 $chunk4 $chunk5 $chunk6 $chunk7 $chunk8 > $out
+    cat $chunk1 $chunk2 $chunk3 $chunk4 $chunk5 $chunk6 $chunk7 $chunk8 > $out
 }
     
 task prepare_distilled_gd_data calls prepare_data
