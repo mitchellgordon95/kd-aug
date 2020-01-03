@@ -40,7 +40,7 @@ def get_result(task, lang, domain, student_size, continued=False):
         return parsed['score'] if parsed else 'inf'
     else:
         bleu_fname = f'out/{continued}{task}_bleu_dev/{"+".join([part for part in parts if part])}/bleu'
-        log_fname = f'out/train_{task}/{"+".join([part for part in parts if part])}/job.out'
+        log_fname = f'out/{continued}train_{task}/{"+".join([part for part in parts if part])}/job.out'
         parsed = parse_file(bleu_fname, BLEU_TEMPLATE)
         if parsed:
             return parsed['bleu']
@@ -51,26 +51,29 @@ def get_result(task, lang, domain, student_size, continued=False):
 
 
 def row(task, domain, student_size, pretty_name, continued=False):
-    return f"{pretty_name:40} & " + " & ".join([get_result(task, lang, domain, student_size, continued=continued) for lang in ['deen', 'ruen']]) + "\\\\"
+    return f"{pretty_name:40} & " + " & ".join([get_result(task, lang, domain, student_size, continued=continued) for lang in ['deen', 'ruen', 'zhen']]) + "\\\\"
 
 
 
 print(row('gd_teacher', None, None, 'Teacher'))
-print(row('gd_student', None, 'half', 'Half Student'))
 print(row('gd_baseline_student', None, 'half', 'Half Sized Baseline'))
-print(row('gd_student', None, 'quarter', 'Quarter Student'))
+print(row('gd_student', None, 'half', 'Half Student'))
+print(row('gd_student', None, 'half', 'Half Student Continued', continued=True))
 print(row('gd_baseline_student', None, 'quarter', 'Quarter Sized Baseline'))
+print(row('gd_student', None, 'quarter', 'Quarter Student'))
+print(row('gd_student', None, 'quarter', 'Quarter Student Continued', continued=True))
 
 for domain in ['ted', 'wipo']:
     print('\\hline')
     print(row('id_baseline_teacher', domain, None, f'{domain} & Large & None & N/A & N/A'))
     print(row('adapted_teacher', domain, None, f'{domain} & Large & Large & N/A & N/A'))
-    for size in ['half', 'quarter']:
+    for size in ['half', 'quarter', 'tiny']:
         print('\\hline')
-        print(row('id_small_baseline', domain, size, f'{domain} & {size} & None & None & No'))
+        print(row('id_small_baseline', domain, size, f'{domain} & {size} & None & None & N/A'))
         print(row('id_baseline_student', domain, size, f'{domain} & {size} & None & Baseline & No'))
         print(row('id_baseline_student', domain, size, f'{domain} & {size} & None & Baseline & Yes', continued=True))
         print(row('id_student', domain, size, f'{domain} & {size} & None & Adapted & No'))
         print(row('id_student', domain, size, f'{domain} & {size} & None & Adapted & Yes', continued=True))
-        print(row('adapted_gd_student_baseline', domain, size, f'{domain} & {size} & Baseline & None & No'))
-        print(row('adapted_gd_student', domain, size, f'{domain} & {size} & Student & None & No'))
+        print(row('adapted_gd_student_baseline', domain, size, f'{domain} & {size} & Baseline & None & N/A'))
+        print(row('adapted_gd_student', domain, size, f'{domain} & {size} & Student & None & N/A'))
+        print(row('daad', domain, size, f'{domain} & {size} & Student & Adapted & No'))
