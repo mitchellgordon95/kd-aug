@@ -32,10 +32,12 @@ global {
   SRC=(Lang:
     deen="de"
     ruen="ru"
+    zhen="zh"
   )
   TRG=(Lang:
     deen="en"
     ruen="en"
+    zhen="en"
   )
 
   domain=(Domain:
@@ -54,18 +56,22 @@ global {
   student_layers=(StudentSize:
     half=3
     quarter=3
+    tiny=1
   )
   student_FF_size=(StudentSize:
     half=2048
     quarter=1024
+    tiny=1024
   )
   student_model_size=(StudentSize:
     half=512
     quarter=256
+    tiny=256
   )
   student_embed_size=(StudentSize:
     half="512:512"
     quarter="256:256"
+    tiny="256:256"
   )
 
   ##################################################################################################
