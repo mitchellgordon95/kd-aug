@@ -115,6 +115,32 @@ task id_student_bleu_dev calls multi_bleu
      < ref=$DEV_TRG@in_domain
      > bleu
 
+# Test the GD student trained with baseline ID teacher
+task gdsbt_decode_dev calls decode 
+    < in=$DEV_SRC@in_domain
+    < model=$model@train_gdsbt
+    > out out_log out_scores
+    :: use_cpu=@ pyenv=@
+    :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
+
+task gdsbt_bleu_dev calls multi_bleu
+     < in=$out@gdsbt_decode_dev
+     < ref=$DEV_TRG@in_domain
+     > bleu
+
+# Test the GD baseline trained with adapted ID teacher
+task gdbat_decode_dev calls decode 
+    < in=$DEV_SRC@in_domain
+    < model=$model@train_gdbat
+    > out out_log out_scores
+    :: use_cpu=@ pyenv=@
+    :: .submitter=@ :: .action_flags=@ :: .resource_flags=$resource_flags_decode
+
+task gdbat_bleu_dev calls multi_bleu
+     < in=$out@gdbat_decode_dev
+     < ref=$DEV_TRG@in_domain
+     > bleu
+
 # Test the ID student baseline
 task id_baseline_student_decode_dev calls decode 
     < in=$DEV_SRC@in_domain

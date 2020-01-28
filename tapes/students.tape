@@ -103,6 +103,36 @@ task train_id_baseline_student calls train
     :: use_cpu=@
     :: .submitter=@ .resource_flags=$resource_flags_train .action_flags=@
 
+# Train GD student with baseline ID teacher
+task train_gdsbt calls train
+    < prepared_data=$data@prepare_distilled_id_with_baseline_teacher
+    < dev_src=$DEV_SRC@in_domain
+    < dev_trg=$DEV_TRG@in_domain
+    < model_init=$model@train_gd_student
+    > model
+    :: pyenv=@
+    :: num_layers=$student_layers
+    :: model_size=$student_model_size
+    :: embed_size=$student_embed_size
+    :: FF_size=$student_FF_size
+    :: use_cpu=@
+    :: .submitter=@ .resource_flags=$resource_flags_train .action_flags=@
+
+# Train GD baseline with adapted teacher
+task train_gdbat calls train
+    < prepared_data=$data@prepare_distilled_id_with_adapted
+    < dev_src=$DEV_SRC@in_domain
+    < dev_trg=$DEV_TRG@in_domain
+    < model_init=$model@train_gd_student_baseline
+    > model
+    :: pyenv=@
+    :: num_layers=$student_layers
+    :: model_size=$student_model_size
+    :: embed_size=$student_embed_size
+    :: FF_size=$student_FF_size
+    :: use_cpu=@
+    :: .submitter=@ .resource_flags=$resource_flags_train .action_flags=@
+
 # Train ID baseline
 task train_id_small_baseline calls train
     < prepared_data=$data@prepare_id_data
