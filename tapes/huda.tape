@@ -34,11 +34,11 @@ task gd_student_huda calls huda
     < model=$model@train_gd_student
     > translations > bleu
     :: dataset=(HudaData:
-       acquis=acquis,
-       emea=emea,
-       it=it,
-       koran=koran,
-       ted=ted,
+       acquis=acquis
+       emea=emea
+       it=it
+       koran=koran
+       ted=ted
        wipo=wipo
     )
     :: use_cpu=@ pyenv=@
@@ -48,11 +48,11 @@ task gd_student_baseline_huda calls huda
     < model=$model@train_gd_student_baseline
     > translations > bleu
     :: dataset=(HudaData:
-       acquis=acquis,
-       emea=emea,
-       it=it,
-       koran=koran,
-       ted=ted,
+       acquis=acquis
+       emea=emea
+       it=it
+       koran=koran
+       ted=ted
        wipo=wipo
     )
     :: use_cpu=@ pyenv=@
@@ -62,11 +62,11 @@ task id_small_baseline_huda calls huda
     < model=$model@train_id_small_baseline
     > translations > bleu
     :: dataset=(HudaData:
-       acquis=acquis,
-       emea=emea,
-       it=it,
-       koran=koran,
-       ted=ted,
+       acquis=acquis
+       emea=emea
+       it=it
+       koran=koran
+       ted=ted
        wipo=wipo
     )
     :: use_cpu=@ pyenv=@
@@ -76,11 +76,11 @@ task id_baseline_student_huda calls huda
     < model=$model@train_id_baseline_student
     > translations > bleu
     :: dataset=(HudaData:
-       acquis=acquis,
-       emea=emea,
-       it=it,
-       koran=koran,
-       ted=ted,
+       acquis=acquis
+       emea=emea
+       it=it
+       koran=koran
+       ted=ted
        wipo=wipo
     )
     :: use_cpu=@ pyenv=@
