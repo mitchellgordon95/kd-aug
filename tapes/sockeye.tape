@@ -126,7 +126,7 @@ func decode : sockeye
     -o out.all \
     --output-type translation_with_score \
     --beam-size 12 \
-    --batch-size 10 \
+    --batch-size 8 \
     --max-input-len 300 \
     --disable-device-locking \
 
