@@ -6,25 +6,7 @@ package sockeye :: .versioner=git .repo="https://github.com/mjpost/sockeye" .ref
 package sacrebleu :: .versioner=pip .package="sacrebleu" .tag="1.2.12" { }
 package subword_nmt :: .versioner=pip .package="subword-nmt" .tag="0.3.5" { }
 package mosesdecoder :: .versioner=git .repo="https://github.com/moses-smt/mosesdecoder" .ref=HEAD { }
-
-package sentencepiece :: .versioner=git .repo="https://github.com/google/sentencepiece" .ref="tags/v0.1.5" {  # v0.1.6 throws segfault
-  mkdir build
-  cd build
-  cmake ..
-  make -j $(nproc)
-}
-
-package tools
-    :: .versioner=git .repo="https://github.com/shuoyangd/tape4nmt-tools" .ref=HEAD {
-  pip install -r requirements.txt
-}
-
-# using my fork for now, as fairseq evolves pretty fast
-package fairseq
-    :: .versioner=git .repo="https://github.com/shuoyangd/fairseq" .ref=HEAD {
-
-  python setup.py build develop
-}
+package scripts :: .versioner=disk .path="/exp/mgordon/kd-aug/scripts" { }
 
 global {
 
@@ -40,39 +22,14 @@ global {
     zhen="en"
   )
 
-  domain=(Domain:
+  dataset=(Dataset:
+    generaldomain="generaldomain"
     wipo="wipo"
     ted="ted"
   )
 
-  # Architecture choices
-  # TODO: maybe vary this with choice of language
-  teacher_layers=6
-  teacher_FF_size=2048
-  teacher_model_size=512
-  teacher_embed_size="512:512"
-
-  # TODO: do a big student and a small student branch
-  student_layers=(StudentSize:
-    half=3
-    quarter=3
-    tiny=1
-  )
-  student_FF_size=(StudentSize:
-    half=2048
-    quarter=1024
-    tiny=1024
-  )
-  student_model_size=(StudentSize:
-    half=512
-    quarter=256
-    tiny=256
-  )
-  student_embed_size=(StudentSize:
-    half="512:512"
-    quarter="256:256"
-    tiny="256:256"
-  )
+  teacher_size=(TeacherSize: large medium small tiny)
+  student_size=(StudentSize: large medium small tiny)
 
   ##################################################################################################
   # General options you should set for your environment
