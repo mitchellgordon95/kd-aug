@@ -13,6 +13,10 @@ task train_teacher : sockeye : scripts
     --target $train_trg \
     --validation-source $dev_src \
     --validation-target $dev_trg \
+    --transformer-dropout-attention=0.1 \
+    --transformer-dropout-act=0.1 \
+    --transformer-dropout-prepost=0.1 \
+    --label-smoothing=0.1 \
     $($scripts/size_params.sh $teacher_size)
 }
 

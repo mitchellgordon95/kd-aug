@@ -9,8 +9,12 @@ import "tapes/teacher.tape"
 import "tapes/distilling.tape"
 import "tapes/student.tape"
 
-plan all {
-  reach teacher_bleu_dev, student_bleu_dev via (Dataset: ted) * (Lang: deen) * (TeacherSize: large) * (StudentSize: tiny)
+plan dropout {
+  reach teacher_bleu_dev, student_bleu_dev via (Dataset: *) * (Lang: deen ruen) * (Concat: *) * (TeacherSize: large) * (StudentSize: *) * (StudentDropout: *)
+}
+
+plan smoothing {
+  reach teacher_bleu_dev, student_bleu_dev via (Dataset: *) * (Lang: deen ruen) * (Concat: *) * (TeacherSize: large) * (StudentSize: *) * (StudentSmoothing: *)
 }
 
 

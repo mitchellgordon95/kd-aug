@@ -4,8 +4,9 @@ task chunk_data
     :: chunk=(Chunk:0..7) {
   linecount=$(wc -l $in | awk '{print $1}')
   chunksize=$(( $linecount / 8 + 1 ))
-  begin=$(( $chunk * $chunksize ))
+  begin=$(( $chunk * $chunksize + 1 ))
   end=$(( ($chunk + 1) * $chunksize )) 
+  echo "Using lines $begin to $end inclusive"
   sed -n "${begin},${end}p;${end}q" $in > $out
 }
     

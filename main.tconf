@@ -62,9 +62,9 @@ global {
   action_flags="-m ae -M mitchell.gordon95@gmail.com"
 
   # The default submitter: shell (run locally) or sge (run on a grid)
-  submitter=(TestMode: no="sge" yes="shell")
+  submitter="sge"
 
-  use_cpu=(TestMode: no yes)
+  use_cpu=no
 
   # Virtual env location. This should be a file path to the virtual env you want loaded before tasks.
   # This variable supports both conda and Python's virtualenv. For conda, use "conda:ENV" as the value,

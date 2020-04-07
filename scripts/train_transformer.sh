@@ -35,12 +35,8 @@
     # --transformer-positional-embedding-type=learned \
     # --transformer-preprocess=n \
     # --transformer-postprocess=dr \
-    # --transformer-dropout-attention=0.1 \
-    # --transformer-dropout-act=0.1 \
-    # --transformer-dropout-prepost=0.1 \
     # --weight-init=xavier \
     # --weight-init-scale=3.0 \
     # --weight-init-xavier-factor-type=avg \
     # --optimized-metric=perplexity \
-    # --label-smoothing=0.1 \
     # --gradient-clipping-threshold=1 \
